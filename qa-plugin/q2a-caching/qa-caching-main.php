@@ -29,9 +29,13 @@ class qa_caching_main
         {
             $this->get_cache();
         }
-        else
+        else if (CACHE_STATUS && $this->do_caching())
         {
             ob_start();
+        }
+        else
+        {
+            return;
         }
     }
 
@@ -46,7 +50,7 @@ class qa_caching_main
         {
             $this->html = $this->compress_html(ob_get_contents());
             $total_time = number_format(microtime(true) - $this->timer, 4, ".", "");
-            $this->debug .= "<!-- ++++++++++++CACHED VERSION++++++++++++++++++\n";
+            $this->debug .= "\n<!-- ++++++++++++CACHED VERSION++++++++++++++++++\n";
             $this->debug .= "Created on " . date('Y-m-d H:i:s') . "\n";
             $this->debug .= "Generated in " . $total_time . " seconds\n";
             $this->debug .= "++++++++++++CACHED VERSION++++++++++++++++++ -->";
@@ -65,7 +69,7 @@ class qa_caching_main
 
         if (is_dir(CACHE_DIR) && is_writable(CACHE_DIR))
         {
-            if (function_exists("sem_get") && ($mutex = @sem_get(1976, 1, 0644 | IPC_CREAT, 1)) && @sem_acquire($mutex))
+            if (function_exists("sem_get") && ($mutex = @sem_get(2013, 1, 0644 | IPC_CREAT, 1)) && @sem_acquire($mutex))
                 file_put_contents($this->cache_file, $this->html . $this->debug) . sem_release($mutex);
             /**/
             else if (($mutex = @fopen($this->cachefile, "w")) && @flock($mutex, LOCK_EX))
@@ -114,7 +118,11 @@ class qa_caching_main
         {
             return false;
         }
-
+        //Dont cache the request if it's either POST or PUT
+        else if (preg_match("/^(?:POST|PUT)$/i", $_SERVER["REQUEST_METHOD"]))
+        {
+            return false;
+        }
         list($path, $qs) = explode("?", $_SERVER["REQUEST_URI"], 2);
         parse_str($qs, $url_vars);
 

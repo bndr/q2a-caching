@@ -25,3 +25,6 @@ qa_register_plugin_module(
         'qa_caching_main', // module class name in that PHP file
         'q2a Caching Plugin' // human-readable name of module
 );
+
+qa_opt('plugin_qa_caching_on_off', 1);
+qa_opt('plugin_qa_caching_expiration', 7200);
