@@ -7,30 +7,23 @@
  * @copyright (c) 2013 bndr
  * @license http://creativecommons.org/licenses/by-sa/3.0/legalcode
  */
-
 define('CACHE_STATUS', (int) qa_opt('plugin_qa_caching_on_off')); // "1" - Turned On, "0" - Turned off
 define('CACHE_DIR', QA_BASE_DIR . 'qa-cache'); //Cache Directory
-define('CACHE_EXPIRATION', 7200); //Cache Expiration In seconds
+define('CACHE_EXPIRATION', (int) qa_opt('plugin_qa_caching_expiration')); //Cache Expiration In seconds
 
 class qa_caching_main
 {
 
-    protected $is_logged_in, $cache_file, $html, $debug;
-
-    /**
-     * Constructor
-     */
-    function __construct()
-    {
-        $this->is_logged_in = qa_get_logged_in_userid();
-    }
+    protected $is_logged_in, $cache_file, $html, $debug, $timer;
 
     /**
      * Function that is called at page initialization
      */
     function init_page()
     {
-        $this->cache_file = $this->get_filename();
+        $this->is_logged_in = qa_get_logged_in_userid();
+        $this->timer        = microtime(true);
+        $this->cache_file   = $this->get_filename();
 
         if (CACHE_STATUS && $this->check_cache() && $this->do_caching())
         {
@@ -51,8 +44,12 @@ class qa_caching_main
     {
         if (CACHE_STATUS && $this->do_caching() && !$this->is_logged_in && !$this->check_cache())
         {
-            $this->html = ob_get_contents();
-            $this->debug .= "++++++++++++CACHED VERSION++++++++++++++++++";
+            $this->html = $this->compress_html(ob_get_contents());
+            $total_time = number_format(microtime(true) - $this->timer, 4, ".", "");
+            $this->debug .= "<!-- ++++++++++++CACHED VERSION++++++++++++++++++\n";
+            $this->debug .= "Created on " . date('Y-m-d H:i:s') . "\n";
+            $this->debug .= "Generated in " . $total_time . " seconds\n";
+            $this->debug .= "++++++++++++CACHED VERSION++++++++++++++++++ -->";
             $this->write_cache();
         }
         return;
@@ -117,10 +114,16 @@ class qa_caching_main
         {
             return false;
         }
-        if (preg_match("/\/(?:ask|)\.php/", $_SERVER["REQUEST_URI"]))
+
+        list($path, $qs) = explode("?", $_SERVER["REQUEST_URI"], 2);
+        parse_str($qs, $url_vars);
+
+        foreach ($url_vars as $k => $v)
         {
-            return false;
+            if (preg_match('#qa_blobid#', $k) && strlen($v))
+                return false;
         }
+
         if (is_array($_COOKIE) && !empty($_COOKIE))
         {
             foreach ($_COOKIE as $k => $v)
@@ -153,6 +156,26 @@ class qa_caching_main
         return CACHE_DIR . "/" . $md5_1 . "-" . $md5_2;
     }
 
+    private function compress_html( $html )
+    {
+
+        $search = array(
+            '/\n/', // replace end of line by a space
+            '/\>[^\S ]+/s', // strip whitespaces after tags, except space
+            '/[^\S ]+\</s', // strip whitespaces before tags, except space
+            '/(\s)+/s'  // shorten multiple whitespace sequences
+        );
+
+        $replace = array(
+            ' ',
+            '>',
+            '<',
+            '\\1'
+        );
+
+        return preg_replace($search, $replace, $html);
+    }
+
     /**
      * Qache settings form on the admin page.
      * @param type $qa_content
@@ -165,6 +188,7 @@ class qa_caching_main
         if (qa_clicked('plugin_qa_caching_submit_button'))
         {
             qa_opt('plugin_qa_caching_on_off', (int) qa_post_text('plugin_qa_caching_on_off'));
+            qa_opt('plugin_qa_caching_expiration', (int) qa_post_text('plugin_qa_caching_expiration'));
             $saved = true;
         }
 
@@ -172,10 +196,17 @@ class qa_caching_main
             'ok'      => $saved ? 'Caching settings saved' : null,
             'fields'  => array(
                 array(
-                    'label' => 'Turn the caching On:',
+                    'label' => 'Turn the caching On or Off:',
                     'type'  => 'checkbox',
                     'value' => (int) qa_opt('plugin_qa_caching_on_off'),
                     'tags'  => 'NAME="plugin_qa_caching_on_off"',
+                ),
+                array(
+                    'label'  => 'Cache expiration:',
+                    'type'   => 'number',
+                    'value'  => (qa_opt('plugin_qa_caching_expiration')) ? ((int) qa_opt('plugin_qa_caching_expiration')) : 7200,
+                    'suffix' => 'seconds',
+                    'tags'   => 'NAME="plugin_qa_caching_expiration"'
                 )
             ),
             'buttons' => array(
