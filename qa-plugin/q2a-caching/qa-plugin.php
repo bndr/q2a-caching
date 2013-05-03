@@ -16,6 +16,12 @@ if (!defined('QA_VERSION'))
     header('Location: ../../');
     exit;
 }
+
+/**
+ * Include the caching for registered users
+ */
+include_once(dirname(__FILE__).'/qa-caching-registered.php');
+
 /**
  * Register the plugin
  */
@@ -25,6 +31,3 @@ qa_register_plugin_module(
         'qa_caching_main', // module class name in that PHP file
         'q2a Caching Plugin' // human-readable name of module
 );
-
-qa_opt('plugin_qa_caching_on_off', 1);
-qa_opt('plugin_qa_caching_expiration', 7200);

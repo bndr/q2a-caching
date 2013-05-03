@@ -15,12 +15,17 @@ class qa_caching_main
 {
 
     protected $is_logged_in, $cache_file, $html, $debug, $timer;
-
+    protected $allowed_pages = array(
+        'question',
+        'tags',
+        'users',
+        'unanswered');
     /**
      * Function that is called at page initialization
      */
     function init_page()
     {
+       
         $this->is_logged_in = qa_get_logged_in_userid();
         $this->timer        = microtime(true);
         $this->cache_file   = $this->get_filename();
@@ -123,15 +128,6 @@ class qa_caching_main
         {
             return false;
         }
-        list($path, $qs) = explode("?", $_SERVER["REQUEST_URI"], 2);
-        parse_str($qs, $url_vars);
-
-        foreach ($url_vars as $k => $v)
-        {
-            if (preg_match('#qa_blobid#', $k) && strlen($v))
-                return false;
-        }
-
         if (is_array($_COOKIE) && !empty($_COOKIE))
         {
             foreach ($_COOKIE as $k => $v)
@@ -162,6 +158,19 @@ class qa_caching_main
         $md5_1 = md5($_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
         $md5_2 = md5(preg_replace("/\:[0-9]+$/", "", $_SERVER["HTTP_HOST"]) . $_SERVER["REQUEST_URI"]);
         return CACHE_DIR . "/" . $md5_1 . "-" . $md5_2;
+    }
+
+    /**
+     * What page does the user see?
+     * @return boolean
+     */
+    private function what_page()
+    {
+        $query = (isset($_REQUEST['qa']) && $_SERVER['REQUEST_METHOD'] == "GET") ? $_REQUEST['qa'] : FALSE;
+        if (!$query)
+            return false;
+
+        return $query;
     }
 
     private function compress_html( $html )
