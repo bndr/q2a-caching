@@ -12,5 +12,11 @@ Installation
 ===========
 
 1. Move the q2a-caching directory to your qa-plugin directory.
-2. Turn on the caching in the Admin->Plugins page
-3. Enjoy the caching
+2. Check the permissions of files.
+3. Turn on the caching in the Admin->Plugins page
+4. Enjoy the caching
+
+Notes
+=====
+
+Caching for registered users is being worked on.
