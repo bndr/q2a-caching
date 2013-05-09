@@ -119,6 +119,8 @@ class qa_caching_main {
             foreach ($_COOKIE as $k => $v) {
                 if (preg_match('#session#', $k) && strlen($v))
                     return false;
+                if (preg_match("#fbs_", $k) && strlen($v))
+                    return false;
             }
         }
         return true;
