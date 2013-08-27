@@ -140,9 +140,9 @@ class qa_caching_main {
      * @return type
      */
     private function get_filename() {
-        $md5_1 = md5($_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
-        $md5_2 = md5(preg_replace("/\:[0-9]+$/", "", $_SERVER["HTTP_HOST"]) . $_SERVER["REQUEST_URI"]);
-        return CACHE_DIR . "/" . $md5_1 . "-" . $md5_2;
+    
+        $md5 = md5($_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+        return CACHE_DIR . "/" . $md5;
     }
 
     /**
