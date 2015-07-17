@@ -10,8 +10,8 @@ class qa_caching_event {
         $events = QA_CACHING_EXPIRATION_EVENTS;
         $events = explode(',', str_replace(array("\r\n", "\r", "\n", " "), '', $events));
         if(in_array($event, $events)) {
-			$main = new qa_caching_main;
-            $main->unlinkRecursive(QA_CACHING_DIR);
+            $main = new qa_caching_main;
+            $main->clear_cache();
         }
     }
 }
