@@ -29,6 +29,10 @@ Caching for registered users is being worked on.
 Updates
 ===========
 
+V0.3 [2016/07/18] sama55
+
+1. When admin POSTed/PUTed in admin panel, caches are cleared
+
 V0.2 [2016/07/17] sama55
 
 1. Fix bug (write_cache() in qa-cashing-main.php)
