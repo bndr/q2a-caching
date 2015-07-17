@@ -67,8 +67,11 @@ class qa_caching_main {
             if (function_exists("sem_get") && ($mutex = @sem_get(2013, 1, 0644 | IPC_CREAT, 1)) && @sem_acquire($mutex))
                 file_put_contents($this->cache_file, $this->html . $this->debug) . sem_release($mutex);
             /**/
-            else if (($mutex = @fopen($this->cachefile, "w")) && @flock($mutex, LOCK_EX))
-                file_put_contents($this->cache_file, $this->html . $this->debug) . flock($mutex, LOCK_UN);
+            else if (($mutex = @fopen($this->cache_file, "w")) && @flock($mutex, LOCK_EX)) {
+				fwrite($mutex, $this->html . $this->debug);
+				fflush($mutex);
+				flock($mutex, LOCK_UN);
+			}
             /**/
         }
     }
