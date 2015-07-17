@@ -3,7 +3,7 @@
 /**
  * q2a Caching Plugin
  * Caches all pages for unregistered users.
- * @author Vadim Kr.
+ * @author Vadim Kr. + sama55
  * @copyright (c) 2013 bndr
  * @license http://creativecommons.org/licenses/by-sa/3.0/legalcode
  */
@@ -45,7 +45,10 @@ class qa_caching_main {
      */
     function shutdown($reason = false) {
         if (CACHE_STATUS && $this->do_caching() && !$this->is_logged_in && !$this->check_cache()) {
-            $this->html = $this->compress_html(ob_get_contents());
+			if(qa_opt('plugin_qa_compress_on_off'))
+				$this->html = $this->compress_html(ob_get_contents());
+			else
+				$this->html = ob_get_contents();
             $total_time = number_format(microtime(true) - $this->timer, 4, ".", "");
             $this->debug .= "\n<!-- ++++++++++++CACHED VERSION++++++++++++++++++\n";
             $this->debug .= "Created on " . date('Y-m-d H:i:s') . "\n";
@@ -64,13 +67,15 @@ class qa_caching_main {
             mkdir(CACHE_DIR, 0755, TRUE);
 
         if (is_dir(CACHE_DIR) && is_writable(CACHE_DIR)) {
+			if(qa_opt('plugin_qa_debug_on_off'))
+				$this->html .= $this->debug;
             if (function_exists("sem_get") && ($mutex = @sem_get(2013, 1, 0644 | IPC_CREAT, 1)) && @sem_acquire($mutex))
-                file_put_contents($this->cache_file, $this->html . $this->debug) . sem_release($mutex);
+                file_put_contents($this->cache_file, $this->html) . sem_release($mutex);
             /**/
             else if (($mutex = @fopen($this->cache_file, "w")) && @flock($mutex, LOCK_EX)) {
-		fwrite($mutex, $this->html . $this->debug);
-		fflush($mutex);
-		flock($mutex, LOCK_UN);
+                fwrite($mutex, $this->html);
+                fflush($mutex);
+                flock($mutex, LOCK_UN);
             }
             /**/
         }
@@ -184,17 +189,38 @@ class qa_caching_main {
      * @param type $qa_content
      * @return type
      */
+	function option_default($option) {
+		switch ($option) {
+		case 'plugin_qa_caching_on_off':
+			return false;
+		case 'plugin_qa_caching_expiration':
+			return 7200;
+		case 'plugin_qa_compress_on_off':
+			return false;
+		}
+	}
     function admin_form(&$qa_content) {
         $saved = false;
 
         if (qa_clicked('plugin_qa_caching_submit_button')) {
             qa_opt('plugin_qa_caching_on_off', (int) qa_post_text('plugin_qa_caching_on_off'));
             qa_opt('plugin_qa_caching_expiration', (int) qa_post_text('plugin_qa_caching_expiration'));
+            qa_opt('plugin_qa_compress_on_off', (int) qa_post_text('plugin_qa_compress_on_off'));
+            qa_opt('plugin_qa_debug_on_off', (int) qa_post_text('plugin_qa_debug_on_off'));
             $saved = true;
+			$msg = 'Caching settings saved';
         }
+		if (qa_clicked('plugin_qa_caching_reset_button')) {
+			qa_opt('plugin_qa_caching_on_off', (int) $this->option_default('plugin_qa_caching_on_off'));
+			qa_opt('plugin_qa_caching_expiration', (int) $this->option_default('plugin_qa_caching_expiration'));
+			qa_opt('plugin_qa_compress_on_off', (int) $this->option_default('plugin_qa_compress_on_off'));
+			qa_opt('plugin_qa_debug_on_off', (int) $this->option_default('plugin_qa_debug_on_off'));
+            $saved = true;
+			$msg = 'Caching settings reset';
+		}
 
         return array(
-            'ok' => $saved ? 'Caching settings saved' : null,
+            'ok' => $saved ? $msg : null,
             'fields' => array(
                 array(
                     'label' => 'Turn the caching On or Off:',
@@ -208,13 +234,29 @@ class qa_caching_main {
                     'value' => (qa_opt('plugin_qa_caching_expiration')) ? ((int) qa_opt('plugin_qa_caching_expiration')) : 7200,
                     'suffix' => 'seconds',
                     'tags' => 'NAME="plugin_qa_caching_expiration"'
-                )
+                ),
+                array(
+                    'label' => 'Turn the compress On or Off:',
+                    'type' => 'checkbox',
+                    'value' => (int) qa_opt('plugin_qa_compress_on_off'),
+                    'tags' => 'NAME="plugin_qa_compress_on_off"',
+                ),
+                array(
+                    'label' => 'Turn the debug On or Off:',
+                    'type' => 'checkbox',
+                    'value' => (int) qa_opt('plugin_qa_debug_on_off'),
+                    'tags' => 'NAME="plugin_qa_debug_on_off"',
+                ),
             ),
             'buttons' => array(
                 array(
                     'label' => 'Save Changes',
                     'tags' => 'NAME="plugin_qa_caching_submit_button"',
                 ),
+				array(
+					'label' => 'Reset to Defaults',
+					'tags' => 'NAME="plugin_qa_caching_reset_button"',
+				),
             ),
         );
     }
