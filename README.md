@@ -6,7 +6,7 @@ Question2Answer Caching Plugin
 Description
 ===========
 
-This plugin will cache the pages for unregistered users.
+This plugin will cache the pages for unregistered users. This (master) branch is under development always. When you download this plugin, please download from newest tagged release version.
 
 Installation
 ===========
