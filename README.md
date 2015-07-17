@@ -24,5 +24,5 @@ Caching for registered users is being worked on.
 Updates
 ===========
 
-[2016/07/17]
+V0.2 [2016/07/17]
 Fixed bug (write_cache() in qa-cashing-main.php)
