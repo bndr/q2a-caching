@@ -1,7 +1,7 @@
-q2a-caching 0.2
+q2a-caching
 ===========
 
-Question2Answer Caching Plugin 0.2
+Question2Answer Caching Plugin V0.3
 
 Description
 ===========
