@@ -27,10 +27,13 @@ class qa_caching_main {
      * Function that is called at page initialization
      */
     function init_page() {
-
         $this->is_logged_in = qa_get_logged_in_userid();
         $this->timer = microtime(true);
         $this->cache_file = $this->get_filename();
+
+        if($this->should_clear_caching()) {
+            $this->clear_cache();
+        }
 
         if (QA_CACHING_STATUS && $this->check_cache() && $this->do_caching()) {
             $this->get_cache();
@@ -92,9 +95,31 @@ class qa_caching_main {
     }
 
     /**
+     * Decision to clear cache
+     * @return boolean
+     */
+    private function should_clear_caching() {
+       if ($this->is_logged_in) {
+            if(qa_request_part(0) == 'admin') {
+                if($_SERVER["REQUEST_METHOD"] == 'POST' || $_SERVER["REQUEST_METHOD"] == 'PUT') {
+                   return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Clear cache.
+     */
+    public function clear_cache() {
+        $this->unlinkRecursive(QA_CACHING_DIR);
+    }
+
+    /**
      * Recursively delete files in specific folder.
      */
-    public function unlinkRecursive($dir, $deleteRootToo=false) {
+    private function unlinkRecursive($dir, $deleteRootToo=false) {
         if(!$dh = @opendir($dir))
             return;
         while (false !== ($obj = readdir($dh))) {
@@ -295,7 +320,7 @@ class qa_caching_main {
             $msg = 'Caching settings reset';
         }
         if (qa_clicked('qa_caching_clear_cache')) {
-            $this->unlinkRecursive(QA_CACHING_DIR);
+            $this->clear_cache();
         }
         $rules = array();
         $rules['qa_caching_excluded_requests'] = 'qa_caching_enabled_field';
