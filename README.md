@@ -24,7 +24,7 @@ Caching for registered users is being worked on.
 Updates
 ===========
 
-V0.2 [2016/07/17]
+V0.2 [2016/07/17] sama55
 
 1. Fix bug (write_cache() in qa-cashing-main.php)
 2. Change all options name (For batting risk with other plugin) 
