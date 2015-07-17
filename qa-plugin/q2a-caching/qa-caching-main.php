@@ -1,15 +1,23 @@
 <?php
+if (!defined('QA_VERSION')) { // don't allow this page to be requested directly from browser
+    header('Location: ../../');
+    exit;
+}
 
 /**
  * q2a Caching Plugin
  * Caches all pages for unregistered users.
  * @author Vadim Kr. + sama55
- * @copyright (c) 2013 bndr
+ * @copyright (c) 2015 bndr + sama55
  * @license http://creativecommons.org/licenses/by-sa/3.0/legalcode
  */
-define('CACHE_STATUS', (int) qa_opt('qa_caching_caching_on_off')); // "1" - Turned On, "0" - Turned off
-define('CACHE_DIR', QA_BASE_DIR . 'qa-cache'); //Cache Directory
-define('CACHE_EXPIRATION', (int) qa_opt('qa_caching_caching_expiration')); //Cache Expiration In seconds
+define('QA_CACHING_DIR', QA_BASE_DIR . 'qa-cache'); //Cache Directory
+define('QA_CACHING_STATUS', (int) qa_opt('qa_caching_enabled')); // "1" - Turned On, "0" - Turned off
+define('QA_CACHING_EXCLUDED_REQUESTS', qa_opt('qa_caching_excluded_requests')); //Excluded cache entries
+define('QA_CACHING_EXPIRATION_TIME', (int) qa_opt('qa_caching_expiration_time')); //Cache Expiration In seconds
+define('QA_CACHING_EXPIRATION_EVENTS', qa_opt('qa_caching_expiration_events')); //Cache Expiration events
+define('QA_CACHING_COMPRESS', (int) qa_opt('qa_caching_compress')); //Compressed cache
+define('QA_CACHING_DEBUG', (int) qa_opt('qa_caching_debug')); //Output debug infomation
 
 class qa_caching_main {
 
@@ -24,9 +32,9 @@ class qa_caching_main {
         $this->timer = microtime(true);
         $this->cache_file = $this->get_filename();
 
-        if (CACHE_STATUS && $this->check_cache() && $this->do_caching()) {
+        if (QA_CACHING_STATUS && $this->check_cache() && $this->do_caching()) {
             $this->get_cache();
-        } else if (CACHE_STATUS && $this->do_caching()) {
+        } else if (QA_CACHING_STATUS && $this->do_caching()) {
             ob_start();
         } else {
             return;
@@ -39,8 +47,8 @@ class qa_caching_main {
      * @return type
      */
     function shutdown($reason = false) {
-        if (CACHE_STATUS && $this->do_caching() && !$this->is_logged_in && !$this->check_cache()) {
-            if(qa_opt('qa_caching_compress_on_off'))
+        if (QA_CACHING_STATUS && $this->do_caching() && !$this->is_logged_in && !$this->check_cache()) {
+            if(QA_CACHING_COMPRESS)
                 $this->html = $this->compress_html(ob_get_contents());
             else
                 $this->html = ob_get_contents();
@@ -65,11 +73,11 @@ class qa_caching_main {
      * Writes file to cache.
      */
     private function write_cache() {
-        if (!file_exists(CACHE_DIR))
-            mkdir(CACHE_DIR, 0755, TRUE);
+        if (!file_exists(QA_CACHING_DIR))
+            mkdir(QA_CACHING_DIR, 0755, TRUE);
 
-        if (is_dir(CACHE_DIR) && is_writable(CACHE_DIR)) {
-            if(qa_opt('qa_caching_debug_on_off'))
+        if (is_dir(QA_CACHING_DIR) && is_writable(QA_CACHING_DIR)) {
+            if(QA_CACHING_DEBUG)
                 $this->html .= $this->debug;
             if (function_exists("sem_get") && ($mutex = @sem_get(2013, 1, 0644 | IPC_CREAT, 1)) && @sem_acquire($mutex))
                 file_put_contents($this->cache_file, $this->html) . sem_release($mutex);
@@ -83,6 +91,23 @@ class qa_caching_main {
         }
     }
 
+    /**
+     * Recursively delete files in specific folder.
+     */
+    public function unlinkRecursive($dir, $deleteRootToo=false) {
+        if(!$dh = @opendir($dir))
+            return;
+        while (false !== ($obj = readdir($dh))) {
+            if($obj == '.' || $obj == '..')
+                continue;
+            if(!@unlink($dir . '/' . $obj))
+                $this->unlinkRecursive($dir.'/'.$obj, true);
+        }
+        closedir($dh);
+        if($deleteRootToo)
+            @rmdir($dir);
+    }
+    
     /**
      * Outputs cache to the user
      */
@@ -107,7 +132,7 @@ class qa_caching_main {
         if (!file_exists($this->cache_file)) {
             return false;
         }
-        if (filemtime($this->cache_file) >= strtotime("-" . CACHE_EXPIRATION . " seconds")) {
+        if (filemtime($this->cache_file) >= strtotime("-" . QA_CACHING_EXPIRATION_TIME . " seconds")) {
             return true;
         } else {
             return false;
@@ -135,8 +160,8 @@ class qa_caching_main {
                     return false;
             }
         }
-        $requests = qa_opt('qa_caching_excluded_requests');
-        $requests = explode(',', $requests);
+        $requests = QA_CACHING_EXCLUDED_REQUESTS;
+        $requests = explode(',', str_replace(array("\r\n", "\r", "\n", " "), '', $requests));
         if(in_array(qa_request(), $requests))
             return false;
         return true;
@@ -158,7 +183,7 @@ class qa_caching_main {
     private function get_filename() {
     
         $md5 = md5($_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
-        return CACHE_DIR . "/" . $md5;
+        return QA_CACHING_DIR . "/" . $md5;
     }
 
     /**
@@ -199,44 +224,85 @@ class qa_caching_main {
      */
 	function option_default($option) {
 		switch ($option) {
-		case 'qa_caching_caching_on_off':
+		case 'qa_caching_enabled':
 			return false;
-		case 'qa_caching_caching_expiration':
-			return 3600;
 		case 'qa_caching_excluded_requests':
 			return 'login,register,confirm,forgot,reset,feedback,search';
-		case 'qa_caching_compress_on_off':
-			return true;
-		case 'qa_caching_debug_on_off':
+		case 'qa_caching_expiration_time':
+			return 3600;
+		case 'qa_caching_expiration_events':
+			return  'q_post,a_post,c_post'.PHP_EOL
+                   .',q_queue,a_queue,c_queue'.PHP_EOL
+                   .',q_edit,a_edit,c_edit'.PHP_EOL
+                   .',q_close,q_reopen'.PHP_EOL
+                   .',a_select,a_unselect'.PHP_EOL
+                   .',q_flag,a_flag,c_flag,q_unflag,a_unflag,c_unflag,q_clearflags,a_clearflags,c_clearflags'.PHP_EOL
+                   .',q_hide,a_hide,c_hide,q_reshow,a_reshow,c_reshow'.PHP_EOL
+                   .',q_approve,a_approve,c_approve,q_reject,a_reject,c_reject'.PHP_EOL
+                   .',q_requeue,a_requeue,c_requeue'.PHP_EOL
+                   .',q_delete,a_delete,c_delete'.PHP_EOL
+                   .',q_claim,a_claim,c_claim'.PHP_EOL
+                   .',q_move'.PHP_EOL
+                   .',a_to_c'.PHP_EOL
+                   .',q_vote_up,q_vote_down,q_vote_nil,a_vote_up,a_vote_down,a_vote_nil'.PHP_EOL
+                   .',q_favorite,q_unfavorite'.PHP_EOL
+                   .',u_register'.PHP_EOL
+                   //.',u_login,u_logout'.PHP_EOL
+                   //.',u_confirmed'.PHP_EOL
+                   //.',u_reset'.PHP_EOL
+                   //.',u_save'.PHP_EOL
+                   //.',u_password'.PHP_EOL
+                   .',u_edit'.PHP_EOL
+                   //.',u_message'.PHP_EOL
+                   //.',u_wall_post'.PHP_EOL
+                   //.',u_wall_delete'.PHP_EOL
+                   //.',u_block,u_unblock'.PHP_EOL
+                   .',u_delete'.PHP_EOL
+                   //.',u_favorite,u_unfavorite'.PHP_EOL
+                   //.',ip_block,ip_unblock'.PHP_EOL
+                   //.',tag_favorite,tag_unfavorite'.PHP_EOL
+                   //.',cat_favorite,cat_unfavorite'.PHP_EOL
+                   //.',feedback'.PHP_EOL
+                   //.',search'.PHP_EOL
+                   ;
+		case 'qa_caching_compress':
+			return false;
+		case 'qa_caching_debug':
 			return true;
 		}
 	}
     function admin_form(&$qa_content) {
         $saved = false;
 
-        if (qa_clicked('qa_caching_caching_submit_button')) {
-            qa_opt('qa_caching_caching_on_off', (int) qa_post_text('qa_caching_caching_on_off'.'_field'));
-            qa_opt('qa_caching_caching_expiration', (int) qa_post_text('qa_caching_caching_expiration'.'_field'));
+        if (qa_clicked('qa_caching_submit_button')) {
+            qa_opt('qa_caching_enabled', (int) qa_post_text('qa_caching_enabled'.'_field'));
             qa_opt('qa_caching_excluded_requests', qa_post_text('qa_caching_excluded_requests'.'_field'));
-            qa_opt('qa_caching_compress_on_off', (int) qa_post_text('qa_caching_compress_on_off'.'_field'));
-            qa_opt('qa_caching_debug_on_off', (int) qa_post_text('qa_caching_debug_on_off'.'_field'));
+            qa_opt('qa_caching_expiration_time', (int) qa_post_text('qa_caching_expiration_time'.'_field'));
+            qa_opt('qa_caching_expiration_events', qa_post_text('qa_caching_expiration_events'.'_field'));
+            qa_opt('qa_caching_compress', (int) qa_post_text('qa_caching_compress'.'_field'));
+            qa_opt('qa_caching_debug', (int) qa_post_text('qa_caching_debug'.'_field'));
             $saved = true;
             $msg = 'Caching settings saved';
         }
-        if (qa_clicked('qa_caching_caching_reset_button')) {
-            qa_opt('qa_caching_caching_on_off', (int) $this->option_default('qa_caching_caching_on_off'));
-            qa_opt('qa_caching_caching_expiration', (int) $this->option_default('qa_caching_caching_expiration'));
+        if (qa_clicked('qa_caching_reset_button')) {
+            qa_opt('qa_caching_enabled', (int) $this->option_default('qa_caching_enabled'));
             qa_opt('qa_caching_excluded_requests', $this->option_default('qa_caching_excluded_requests'));
-            qa_opt('qa_caching_compress_on_off', (int) $this->option_default('qa_caching_compress_on_off'));
-            qa_opt('qa_caching_debug_on_off', (int) $this->option_default('qa_caching_debug_on_off'));
+            qa_opt('qa_caching_expiration_time', (int) $this->option_default('qa_caching_expiration_time'));
+            qa_opt('qa_caching_expiration_events', $this->option_default('qa_caching_expiration_events'));
+            qa_opt('qa_caching_compress', (int) $this->option_default('qa_caching_compress'));
+            qa_opt('qa_caching_debug', (int) $this->option_default('qa_caching_debug'));
             $saved = true;
             $msg = 'Caching settings reset';
         }
+        if (qa_clicked('qa_caching_clear_cache')) {
+            $this->unlinkRecursive(QA_CACHING_DIR);
+        }
         $rules = array();
-        $rules['qa_caching_caching_expiration'] = 'qa_caching_caching_on_off_field';
-        $rules['qa_caching_excluded_requests'] = 'qa_caching_caching_on_off_field';
-        $rules['qa_caching_compress_on_off'] = 'qa_caching_caching_on_off_field';
-        $rules['qa_caching_debug_on_off'] = 'qa_caching_caching_on_off_field';
+        $rules['qa_caching_excluded_requests'] = 'qa_caching_enabled_field';
+        $rules['qa_caching_expiration_time'] = 'qa_caching_enabled_field';
+        $rules['qa_caching_expiration_events'] = 'qa_caching_enabled_field';
+        $rules['qa_caching_compress'] = 'qa_caching_enabled_field';
+        $rules['qa_caching_debug'] = 'qa_caching_enabled_field';
         qa_set_display_rules($qa_content, $rules);
         return array(
             'ok' => $saved ? $msg : null,
@@ -244,16 +310,8 @@ class qa_caching_main {
                 array(
                     'label' => 'Enable cache:',
                     'type' => 'checkbox',
-                    'value' => (int) qa_opt('qa_caching_caching_on_off'),
-                    'tags' => 'NAME="qa_caching_caching_on_off_field" id="qa_caching_caching_on_off_field"',
-                ),
-                array(
-                    'id' => 'qa_caching_caching_expiration',
-                    'label' => 'Cache expiration:',
-                    'type' => 'number',
-                    'value' => (qa_opt('qa_caching_caching_expiration')) ? ((int) qa_opt('qa_caching_caching_expiration')) : 3600,
-                    'suffix' => 'seconds',
-                    'tags' => 'NAME="qa_caching_caching_expiration_field"'
+                    'value' => (int) qa_opt('qa_caching_enabled'),
+                    'tags' => 'NAME="qa_caching_enabled_field" id="qa_caching_enabled_field"',
                 ),
                 array(
                     'id' => 'qa_caching_excluded_requests',
@@ -264,28 +322,48 @@ class qa_caching_main {
                     'tags' => 'NAME="qa_caching_excluded_requests_field"',
                 ),
                 array(
-                    'id' => 'qa_caching_compress_on_off',
-                    'label' => 'Compress cache:',
-                    'type' => 'checkbox',
-                    'value' => (int) qa_opt('qa_caching_compress_on_off'),
-                    'tags' => 'NAME="qa_caching_compress_on_off_fiel"',
+                    'id' => 'qa_caching_expiration_time',
+                    'label' => 'Expiration time:',
+                    'type' => 'number',
+                    'value' => (qa_opt('qa_caching_expiration_time')) ? ((int) qa_opt('qa_caching_expiration_time')) : 3600,
+                    'suffix' => 'seconds',
+                    'tags' => 'NAME="qa_caching_expiration_time_field"'
                 ),
                 array(
-                    'id' => 'qa_caching_debug_on_off',
+                    'id' => 'qa_caching_expiration_events',
+                    'label' => 'Expiration events: (Comma-separated)',
+                    'type' => 'textarea',
+                    'rows' => 20,
+                    'value' => qa_opt('qa_caching_expiration_events'),
+                    'tags' => 'NAME="qa_caching_expiration_events_field"',
+                ),
+                array(
+                    'id' => 'qa_caching_compress',
+                    'label' => 'Compress cache:'.' <span style="color:#FF8C00;">Be carefull! Javascript error may occur.</span>',
+                    'type' => 'checkbox',
+                    'value' => (int) qa_opt('qa_caching_compress'),
+                    'tags' => 'NAME="qa_caching_compress_field"',
+                ),
+                array(
+                    'id' => 'qa_caching_debug',
                     'label' => 'Output debug comment:',
                     'type' => 'checkbox',
-                    'value' => (int) qa_opt('qa_caching_debug_on_off'),
-                    'tags' => 'NAME="qa_caching_debug_on_off_field"',
+                    'value' => (int) qa_opt('qa_caching_debug'),
+                    'tags' => 'NAME="qa_caching_debug_field"',
                 ),
             ),
             'buttons' => array(
                 array(
                     'label' => 'Save Changes',
-                    'tags' => 'NAME="qa_caching_caching_submit_button"',
+                    'tags' => 'NAME="qa_caching_submit_button"',
                 ),
                 array(
                     'label' => 'Reset to Defaults',
-                    'tags' => 'NAME="qa_caching_caching_reset_button"',
+                    'tags' => 'NAME="qa_caching_reset_button"',
+                ),
+                array(
+                    'label' => 'Clear cache',
+                    'tags' => 'NAME="qa_caching_clear_cache"',
                 ),
             ),
         );
