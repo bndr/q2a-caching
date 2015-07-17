@@ -27,10 +27,12 @@ Updates
 V0.2 [2016/07/17]
 
 1. Fix bug (write_cache() in qa-cashing-main.php)
-2. Change option names in admin panel
-3. Change default expiration time from 7200 to 3600
-4. Add compress option in admin form
-5. Add debug output option in admin form
-6. Add Reset button in admin form
-7. Remove Q2A debug (performance) data from cache
-8. Output Q2A debug (performance) data at last process
+2. Change all options name (For batting risk with other plugin) 
+3. Change option names in admin panel
+4. Change default expiration time from 7200 to 3600
+5. Add excluded requests option
+6. Add compress option in admin form
+7. Add debug output option in admin form
+8. Add Reset button in admin form
+9. Remove Q2A debug (performance) data from cache
+10. Output Q2A debug (performance) data at last process
