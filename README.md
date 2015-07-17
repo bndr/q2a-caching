@@ -27,6 +27,6 @@ Updates
 V0.2 [2016/07/17]
 
 1. Fixed bug (write_cache() in qa-cashing-main.php)
-2. Add compress option to admin form
-3. Add debug output option to admin form
-4. Add Reset button to admin form
+2. Add compress option in admin form
+3. Add debug output option in admin form
+4. Add Reset button in admin form
