@@ -31,7 +31,7 @@ Updates
 
 V0.3 [2016/07/18] sama55
 
-1. When admin POSTed/PUTed in admin panel, caches are cleared
+1. When POST/PUT was requested in admin panel, caches are removed
 
 V0.2 [2016/07/17] sama55
 
