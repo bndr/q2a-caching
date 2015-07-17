@@ -50,7 +50,7 @@ class qa_caching_main {
             else
                 $this->html = ob_get_contents();
             if (QA_DEBUG_PERFORMANCE) {
-				$endtag = '</html>';
+                $endtag = '</html>';
                 $rpos = strrpos($this->html, $endtag);
                 if($rpos !== false) {
                     $this->html = substr($this->html, 0, $rpos+strlen($endtag));
@@ -100,7 +100,7 @@ class qa_caching_main {
             $contents .= ob_get_contents();
             ob_end_clean();
         }
-		exit($contents);
+        exit($contents);
     }
 
     /**
