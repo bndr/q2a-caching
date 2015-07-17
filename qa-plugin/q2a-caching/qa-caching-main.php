@@ -49,6 +49,13 @@ class qa_caching_main {
                 $this->html = $this->compress_html(ob_get_contents());
             else
                 $this->html = ob_get_contents();
+            if (QA_DEBUG_PERFORMANCE) {
+				$endtag = '</html>';
+                $rpos = strrpos($this->html, $endtag);
+                if($rpos !== false) {
+                    $this->html = substr($this->html, 0, $rpos+strlen($endtag));
+                }
+            }
             $total_time = number_format(microtime(true) - $this->timer, 4, ".", "");
             $this->debug .= "\n<!-- ++++++++++++CACHED VERSION++++++++++++++++++\n";
             $this->debug .= "Created on " . date('Y-m-d H:i:s') . "\n";
@@ -85,7 +92,15 @@ class qa_caching_main {
      * Outputs cache to the user
      */
     private function get_cache() {
-        exit(file_get_contents($this->cache_file));
+        $contents = file_get_contents($this->cache_file);
+        if (QA_DEBUG_PERFORMANCE) {
+            global $qa_usage;
+            ob_start();
+            $qa_usage->output();
+            $contents .= ob_get_contents();
+            ob_end_clean();
+        }
+		exit($contents);
     }
 
     /**
