@@ -3,10 +3,15 @@ q2a-caching V0.3
 
 Question2Answer Caching Plugin
 
+Important
+===========
+
+This (master) branch is under development always. When you download this plugin, please download from newest tagged release version.
+
 Description
 ===========
 
-This plugin will cache the pages for unregistered users. This (master) branch is under development always. When you download this plugin, please download from newest tagged release version.
+This plugin will cache the pages for unregistered users.
 
 Installation
 ===========
