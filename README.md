@@ -26,7 +26,8 @@ Updates
 
 V0.2 [2016/07/17]
 
-1. Fixed bug (write_cache() in qa-cashing-main.php)
+1. Fix bug (write_cache() in qa-cashing-main.php)
+2. Change option names in admin panel
 2. Add compress option in admin form
 3. Add debug output option in admin form
 4. Add Reset button in admin form
