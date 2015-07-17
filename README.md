@@ -30,3 +30,5 @@ V0.2 [2016/07/17]
 2. Add compress option in admin form
 3. Add debug output option in admin form
 4. Add Reset button in admin form
+5. Remove Q2A debug (performance) data from cache
+6. Output Q2A debug (performance) data at last process
