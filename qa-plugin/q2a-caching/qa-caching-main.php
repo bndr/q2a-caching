@@ -14,11 +14,6 @@ define('CACHE_EXPIRATION', (int) qa_opt('plugin_qa_caching_expiration')); //Cach
 class qa_caching_main {
 
     protected $is_logged_in, $cache_file, $html, $debug, $timer;
-    protected $allowed_pages = array(
-        'question',
-        'tags',
-        'users',
-        'unanswered');
 
     /**
      * Function that is called at page initialization
@@ -60,7 +55,7 @@ class qa_caching_main {
             $this->debug .= "\n<!-- ++++++++++++CACHED VERSION++++++++++++++++++\n";
             $this->debug .= "Created on " . date('Y-m-d H:i:s') . "\n";
             $this->debug .= "Generated in " . $total_time . " seconds\n";
-            $this->debug .= "++++++++++++CACHED VERSION++++++++++++++++++ -->";
+            $this->debug .= "++++++++++++CACHED VERSION++++++++++++++++++ -->\n";
             $this->write_cache();
         }
         return;
@@ -209,7 +204,7 @@ class qa_caching_main {
 		case 'plugin_qa_caching_on_off':
 			return false;
 		case 'plugin_qa_caching_expiration':
-			return 7200;
+			return 3600;
 		case 'plugin_qa_compress_on_off':
 			return false;
 		}
@@ -238,7 +233,7 @@ class qa_caching_main {
             'ok' => $saved ? $msg : null,
             'fields' => array(
                 array(
-                    'label' => 'Turn the caching On or Off:',
+                    'label' => 'Enable cache:',
                     'type' => 'checkbox',
                     'value' => (int) qa_opt('plugin_qa_caching_on_off'),
                     'tags' => 'NAME="plugin_qa_caching_on_off"',
@@ -246,18 +241,18 @@ class qa_caching_main {
                 array(
                     'label' => 'Cache expiration:',
                     'type' => 'number',
-                    'value' => (qa_opt('plugin_qa_caching_expiration')) ? ((int) qa_opt('plugin_qa_caching_expiration')) : 7200,
+                    'value' => (qa_opt('plugin_qa_caching_expiration')) ? ((int) qa_opt('plugin_qa_caching_expiration')) : 3600,
                     'suffix' => 'seconds',
                     'tags' => 'NAME="plugin_qa_caching_expiration"'
                 ),
                 array(
-                    'label' => 'Turn the compress On or Off:',
+                    'label' => 'Compress cache:',
                     'type' => 'checkbox',
                     'value' => (int) qa_opt('plugin_qa_compress_on_off'),
                     'tags' => 'NAME="plugin_qa_compress_on_off"',
                 ),
                 array(
-                    'label' => 'Turn the debug On or Off:',
+                    'label' => 'Output debug comment:',
                     'type' => 'checkbox',
                     'value' => (int) qa_opt('plugin_qa_debug_on_off'),
                     'tags' => 'NAME="plugin_qa_debug_on_off"',
