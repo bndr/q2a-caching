@@ -1,7 +1,7 @@
-q2a-caching 0.1
+q2a-caching 0.2
 ===========
 
-Question2Answer Caching Plugin 0.1
+Question2Answer Caching Plugin 0.2
 
 Description
 ===========
@@ -20,3 +20,9 @@ Notes
 =====
 
 Caching for registered users is being worked on.
+
+Updates
+===========
+
+[2016/07/17]
+Fixed bug (write_cache() in qa-cashing-main.php)
