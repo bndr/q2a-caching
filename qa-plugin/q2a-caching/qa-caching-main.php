@@ -68,10 +68,10 @@ class qa_caching_main {
                 file_put_contents($this->cache_file, $this->html . $this->debug) . sem_release($mutex);
             /**/
             else if (($mutex = @fopen($this->cache_file, "w")) && @flock($mutex, LOCK_EX)) {
-				fwrite($mutex, $this->html . $this->debug);
-				fflush($mutex);
-				flock($mutex, LOCK_UN);
-			}
+		fwrite($mutex, $this->html . $this->debug);
+		fflush($mutex);
+		flock($mutex, LOCK_UN);
+            }
             /**/
         }
     }
