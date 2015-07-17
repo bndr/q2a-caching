@@ -30,9 +30,11 @@ V0.2 [2016/07/17]
 2. Change all options name (For batting risk with other plugin) 
 3. Change option names in admin panel
 4. Change default expiration time from 7200 to 3600
-5. Add excluded requests option
-6. Add compress option in admin form
-7. Add debug output option in admin form
-8. Add Reset button in admin form
-9. Remove Q2A debug (performance) data from cache
-10. Output Q2A debug (performance) data at last process
+5. Add Expiration Events
+6. Add excluded requests option
+7. Add compress option in admin form
+8. Add debug output option in admin form
+9. Add Reset button in admin form
+10. Add Clear cache button in admin form
+11. Remove Q2A debug (performance) data from cache
+12. Output Q2A debug (performance) data at last process
