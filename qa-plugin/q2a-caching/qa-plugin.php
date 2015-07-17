@@ -31,3 +31,10 @@ qa_register_plugin_module(
         'qa_caching_main', // module class name in that PHP file
         'q2a Caching Plugin' // human-readable name of module
 );
+qa_register_plugin_module(
+        'event', // type of module
+        'qa-caching-event.php', // PHP file containing module class
+        'qa_caching_event', // module class name in that PHP file
+        'q2a Caching Plugin Event Handler' // human-readable name of module
+);
+
