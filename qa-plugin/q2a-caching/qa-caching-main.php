@@ -55,6 +55,8 @@ class qa_caching_main {
                 $this->html = $this->compress_html(ob_get_contents());
             else
                 $this->html = ob_get_contents();
+            if(strpos($this->html, qa_lang_html('main/page_not_found')) !== false) // if 404 page
+                return;
             if (QA_DEBUG_PERFORMANCE) {
                 $endtag = '</html>';
                 $rpos = strrpos($this->html, $endtag);
