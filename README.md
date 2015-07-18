@@ -32,6 +32,7 @@ Updates
 V0.3 [2016/07/18] sama55
 
 1. When POST/PUT was requested in admin panel, caches are removed
+2. When requests is 404 (Page not found), it is not cached.
 
 V0.2 [2016/07/17] sama55
 
