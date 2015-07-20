@@ -172,7 +172,10 @@ class qa_caching_main {
      * @return boolean
      */
     private function do_caching() {
-        if ($this->is_logged_in) {
+        if(empty($this->cache_file)) {
+            return false;
+        }
+        if($this->is_logged_in) {
             return false;
         }
         //Dont cache the request if it's either POST or PUT
