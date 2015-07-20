@@ -229,21 +229,14 @@ class qa_caching_main {
     }
 
     private function compress_html($html) {
-
         $search = array(
-            '/\n/', // replace end of line by a space
-            '/\>[^\S ]+/s', // strip whitespaces after tags, except space
-            '/[^\S ]+\</s', // strip whitespaces before tags, except space
-            '/(\s)+/s'  // shorten multiple whitespace sequences
+            '/(\t)/s', // remove tab
+            '/<!--[\s\S]*?-->/s', // remove comment
         );
-
         $replace = array(
-            ' ',
-            '>',
-            '<',
-            '\\1'
+            '',
+            '',
         );
-
         return preg_replace($search, $replace, $html);
     }
 
@@ -369,7 +362,7 @@ class qa_caching_main {
                 ),
                 array(
                     'id' => 'qa_caching_compress',
-                    'label' => 'Compress cache:'.' <span style="color:#FF8C00;">Be carefull! Javascript error may occur.</span>',
+                    'label' => 'Compress cache:',
                     'type' => 'checkbox',
                     'value' => (int) qa_opt('qa_caching_compress'),
                     'tags' => 'NAME="qa_caching_compress_field"',
