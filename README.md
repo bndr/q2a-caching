@@ -34,7 +34,7 @@ V0.3 [2016/07/20] sama55
 1. When POST/PUT was requested in admin panel, caches are removed
 2. When requests is 404 (Page not found), it is not cached.
 3. When cache file is empty, cache is not created.
-4. Change compression logic (=> only tab and commnet)
+4. Change compression logic (=> only tab and comment)
 
 V0.2 [2016/07/17] sama55
 
