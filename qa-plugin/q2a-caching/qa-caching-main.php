@@ -171,18 +171,18 @@ class qa_caching_main {
      * Only non-registered users see the cached version.
      * @return boolean
      */
-    public function do_caching() {
-        if(empty($this->cache_file)) {
-            return false;
+    public function do_caching($checkfile=true) {
+        if($checkfile) {
+            if(empty($this->cache_file)) {
+                return false;
+            }
         }
         if(!QA_CACHING_STATUS) {
             return false;
         }
         if($this->is_logged_in) {
             return false;
-        }
-        //Dont cache the request if it's either POST or PUT
-        else if (preg_match("/^(?:POST|PUT)$/i", $_SERVER["REQUEST_METHOD"])) {
+        } else if (preg_match("/^(?:POST|PUT)$/i", $_SERVER["REQUEST_METHOD"])) {
             return false;
         }
         if (is_array($_COOKIE) && !empty($_COOKIE)) {
