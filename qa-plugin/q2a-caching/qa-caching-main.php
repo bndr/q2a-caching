@@ -183,6 +183,9 @@ class qa_caching_main {
         } else if (preg_match("/^(?:POST|PUT)$/i", $_SERVER["REQUEST_METHOD"])) {
             return false;
         }
+        if(qa_request_part(0) == 'admin') {
+            return false;
+        }
         if (is_array($_COOKIE) && !empty($_COOKIE)) {
             foreach ($_COOKIE as $k => $v) {
                 if (preg_match('#session#', $k) && strlen($v))
@@ -210,6 +213,9 @@ class qa_caching_main {
             return false;
         }
         if($this->is_logged_in) {
+            return false;
+        }
+        if(qa_request_part(0) == 'admin') {
             return false;
         }
         /*
