@@ -31,6 +31,8 @@ Updates
 
 V0.4 [2016/07/21] sama55
 
+1. Optimize program codes
+
 V0.3 [2016/07/21] sama55
 
 1. When POST/PUT was requested in admin panel, caches are removed
