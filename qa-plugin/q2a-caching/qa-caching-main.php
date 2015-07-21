@@ -13,7 +13,7 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
  */
 define('QA_CACHING_DIR', QA_BASE_DIR . 'qa-cache'); //Cache Directory
 define('QA_CACHING_STATUS', (int) qa_opt('qa_caching_enabled')); // "1" - Turned On, "0" - Turned off
-define('QA_CACHING_EXCLUDED_REQUESTS', qa_opt('qa_caching_excluded_requests')); //Excluded cache entries
+//define('QA_CACHING_EXCLUDED_REQUESTS', qa_opt('qa_caching_excluded_requests')); //Excluded cache entries
 define('QA_CACHING_EXPIRATION_TIME', (int) qa_opt('qa_caching_expiration_time')); //Cache Expiration In seconds
 define('QA_CACHING_EXPIRATION_EVENTS', qa_opt('qa_caching_expiration_events')); //Cache Expiration events
 define('QA_CACHING_COMPRESS', (int) qa_opt('qa_caching_compress')); //Compressed cache
@@ -191,11 +191,13 @@ class qa_caching_main {
                     return false;
             }
         }
+        /*
         $requests = QA_CACHING_EXCLUDED_REQUESTS;
         $requests = explode(',', str_replace(array("\r\n", "\r", "\n", " "), '', $requests));
         if(in_array(qa_request(), $requests))
             return false;
-        return true;
+        */
+		return true;
     }
 
     /**
@@ -210,10 +212,12 @@ class qa_caching_main {
         if($this->is_logged_in) {
             return false;
         }
+        /*
         $requests = QA_CACHING_EXCLUDED_REQUESTS;
         $requests = explode(',', str_replace(array("\r\n", "\r", "\n", " "), '', $requests));
         if(in_array(qa_request(), $requests))
             return false;
+        */
         return true;
     }
 
@@ -269,8 +273,8 @@ class qa_caching_main {
 		switch ($option) {
 		case 'qa_caching_enabled':
 			return false;
-		case 'qa_caching_excluded_requests':
-			return 'login,register,confirm,forgot,reset,feedback,search';
+		//case 'qa_caching_excluded_requests':
+		//	return 'login,register,confirm,forgot,reset,feedback,search';
 		case 'qa_caching_expiration_time':
 			return 3600;
 		case 'qa_caching_expiration_events':
@@ -319,7 +323,7 @@ class qa_caching_main {
 
         if (qa_clicked('qa_caching_submit_button')) {
             qa_opt('qa_caching_enabled', (int) qa_post_text('qa_caching_enabled'.'_field'));
-            qa_opt('qa_caching_excluded_requests', qa_post_text('qa_caching_excluded_requests'.'_field'));
+            //qa_opt('qa_caching_excluded_requests', qa_post_text('qa_caching_excluded_requests'.'_field'));
             qa_opt('qa_caching_expiration_time', (int) qa_post_text('qa_caching_expiration_time'.'_field'));
             qa_opt('qa_caching_expiration_events', qa_post_text('qa_caching_expiration_events'.'_field'));
             qa_opt('qa_caching_compress', (int) qa_post_text('qa_caching_compress'.'_field'));
@@ -329,7 +333,7 @@ class qa_caching_main {
         }
         if (qa_clicked('qa_caching_reset_button')) {
             qa_opt('qa_caching_enabled', (int) $this->option_default('qa_caching_enabled'));
-            qa_opt('qa_caching_excluded_requests', $this->option_default('qa_caching_excluded_requests'));
+            //qa_opt('qa_caching_excluded_requests', $this->option_default('qa_caching_excluded_requests'));
             qa_opt('qa_caching_expiration_time', (int) $this->option_default('qa_caching_expiration_time'));
             qa_opt('qa_caching_expiration_events', $this->option_default('qa_caching_expiration_events'));
             qa_opt('qa_caching_compress', (int) $this->option_default('qa_caching_compress'));
@@ -341,7 +345,7 @@ class qa_caching_main {
             $this->clear_cache();
         }
         $rules = array();
-        $rules['qa_caching_excluded_requests'] = 'qa_caching_enabled_field';
+        //$rules['qa_caching_excluded_requests'] = 'qa_caching_enabled_field';
         $rules['qa_caching_expiration_time'] = 'qa_caching_enabled_field';
         $rules['qa_caching_expiration_events'] = 'qa_caching_enabled_field';
         $rules['qa_caching_compress'] = 'qa_caching_enabled_field';
@@ -356,14 +360,14 @@ class qa_caching_main {
                     'value' => (int) qa_opt('qa_caching_enabled'),
                     'tags' => 'NAME="qa_caching_enabled_field" id="qa_caching_enabled_field"',
                 ),
-                array(
-                    'id' => 'qa_caching_excluded_requests',
-                    'label' => 'Excluded requests: (Comma-separated)',
-                    'type' => 'textarea',
-                    'rows' => 5,
-                    'value' => qa_opt('qa_caching_excluded_requests'),
-                    'tags' => 'NAME="qa_caching_excluded_requests_field"',
-                ),
+                //array(
+                //    'id' => 'qa_caching_excluded_requests',
+                //    'label' => 'Excluded requests: (Comma-separated)',
+                //    'type' => 'textarea',
+                //    'rows' => 5,
+                //    'value' => qa_opt('qa_caching_excluded_requests'),
+                //    'tags' => 'NAME="qa_caching_excluded_requests_field"',
+                //),
                 array(
                     'id' => 'qa_caching_expiration_time',
                     'label' => 'Expiration time:',
