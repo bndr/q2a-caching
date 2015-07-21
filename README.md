@@ -32,6 +32,7 @@ Updates
 V0.4 [2016/07/21] sama55
 
 1. Optimize program codes
+2. Bug fix about comment form error
 
 V0.3 [2016/07/21] sama55
 
