@@ -35,9 +35,9 @@ class qa_caching_main {
             $this->clear_cache();
         }
 
-        if (QA_CACHING_STATUS && $this->check_cache() && $this->do_caching()) {
+        if ($this->check_cache() && $this->do_caching()) {
             $this->get_cache();
-        } else if (QA_CACHING_STATUS && $this->do_caching()) {
+        } else if ($this->do_caching()) {
             ob_start();
         } else {
             return;
@@ -50,7 +50,7 @@ class qa_caching_main {
      * @return type
      */
     function shutdown($reason = false) {
-        if (QA_CACHING_STATUS && $this->do_caching() && !$this->is_logged_in && !$this->check_cache()) {
+        if ($this->do_caching() && !$this->is_logged_in && !$this->check_cache()) {
             if(QA_CACHING_COMPRESS)
                 $this->html = $this->compress_html(ob_get_contents());
             else
@@ -171,8 +171,11 @@ class qa_caching_main {
      * Only non-registered users see the cached version.
      * @return boolean
      */
-    private function do_caching() {
+    public function do_caching() {
         if(empty($this->cache_file)) {
+            return false;
+        }
+        if(!QA_CACHING_STATUS) {
             return false;
         }
         if($this->is_logged_in) {
