@@ -171,11 +171,9 @@ class qa_caching_main {
      * Only non-registered users see the cached version.
      * @return boolean
      */
-    public function do_caching($checkfile=true) {
-        if($checkfile) {
-            if(empty($this->cache_file)) {
-                return false;
-            }
+    private function do_caching() {
+        if(empty($this->cache_file)) {
+            return false;
         }
         if(!QA_CACHING_STATUS) {
             return false;
@@ -192,6 +190,25 @@ class qa_caching_main {
                 if (preg_match("#fbs_#", $k) && strlen($v))
                     return false;
             }
+        }
+        $requests = QA_CACHING_EXCLUDED_REQUESTS;
+        $requests = explode(',', str_replace(array("\r\n", "\r", "\n", " "), '', $requests));
+        if(in_array(qa_request(), $requests))
+            return false;
+        return true;
+    }
+
+    /**
+     * Checks if the user is allowed to be shown cache.
+     * Only non-registered users see the cached version.
+     * @return boolean
+     */
+    public function now_caching() {
+        if(!QA_CACHING_STATUS) {
+            return false;
+        }
+        if($this->is_logged_in) {
+            return false;
         }
         $requests = QA_CACHING_EXCLUDED_REQUESTS;
         $requests = explode(',', str_replace(array("\r\n", "\r", "\n", " "), '', $requests));
