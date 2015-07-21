@@ -10,7 +10,7 @@ that the code has not expired (if more than QA_FORM_EXPIRY_SECS have passed). Lo
 */
 function qa_check_form_security_code($action, $value) {
     $main = new qa_caching_main;
-    if($main->do_caching()) {
+    if($main->do_caching(false)) {
 		$reportproblems=array();
 		$silentproblems=array();
 		if (!isset($value))
