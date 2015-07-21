@@ -1,4 +1,4 @@
-q2a-caching V0.3
+q2a-caching V0.4
 ===========
 
 Question2Answer Caching Plugin
@@ -28,6 +28,8 @@ Caching for registered users is being worked on.
 
 Updates
 ===========
+
+V0.4 [2016/07/21] sama55
 
 V0.3 [2016/07/21] sama55
 
