@@ -35,7 +35,7 @@ V0.3 [2016/07/21] sama55
 2. When requests is 404 (Page not found), it is not cached.
 3. When cache file is empty, cache is not created.
 4. Change compression logic (=> only tab and comment)
-5. Change logic for CSRF protector
+5. Change logic of CSRF protector
 
 V0.2 [2016/07/17] sama55
 
