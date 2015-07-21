@@ -9,7 +9,8 @@ Return whether $value matches the expected form security (anti-CSRF protection) 
 that the code has not expired (if more than QA_FORM_EXPIRY_SECS have passed). Logs causes for suspicion.
 */
 function qa_check_form_security_code($action, $value) {
-    if(qa_opt('qa_caching_enabled') && !qa_is_logged_in()) {
+    $main = new qa_caching_main;
+    if($main->do_caching()) {
 		$reportproblems=array();
 		$silentproblems=array();
 		if (!isset($value))
