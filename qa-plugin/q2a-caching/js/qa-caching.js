@@ -12,16 +12,15 @@ $(document).ready(function () {
         if (form.method == "post") {
             var childs = form.childNodes;
             for (var j = 0 ; j < childs.length ; j ++) {
-                if(childs[j].name == 'code') {
-                    form.removeChild(childs[j]);
-                    break;
+                if(childs[j].nodeType == 1 && childs[j].name !== undefined) {
+                    var name = childs[j].name;
+                    var ac = new RegExp("^[a|c][1-9]+_code$", "i");
+                    if(name == 'code' || name == 'formcode' || name.match(ac)) {
+                        childs[j].value = value;
+                        break;
+                    }
                 }
             }
-            var sessid = document.createElement("input");
-            sessid.type = "hidden";
-            sessid.name = 'code';
-            sessid.value = value;
-            form.appendChild(sessid);
         }
     }
 });
