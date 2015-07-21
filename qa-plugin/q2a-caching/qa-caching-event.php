@@ -7,7 +7,8 @@ require_once QA_PLUGIN_DIR.'q2a-caching/qa-caching-main.php';
 
 class qa_caching_event {
     function process_event ($event, $userid, $handle, $cookieid, $params) {
-        if(QA_CACHING_STATUS && !qa_is_logged_in()) {
+        $main = new qa_caching_main;
+        if($main->do_caching()) {
             $events = QA_CACHING_EXPIRATION_EVENTS;
             $events = explode(',', str_replace(array("\r\n", "\r", "\n", " "), '', $events));
             if(in_array($event, $events)) {
