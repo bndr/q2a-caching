@@ -36,6 +36,7 @@ V0.3 [2016/07/21] sama55
 3. When cache file is empty, cache is not created.
 4. Change compression logic (=> only tab and comment)
 5. Change logic of CSRF protector
+6. When user is not logged in, welcome notification bar is removed.
 
 V0.2 [2016/07/17] sama55
 
