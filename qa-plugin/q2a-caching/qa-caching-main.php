@@ -257,7 +257,7 @@ class qa_caching_main {
 
         return $query;
     }
-
+/*
     private function compress_html($html) {
         $searchs = array(
             '/<!--[\s\S]*?-->/s', // remove comment
@@ -274,6 +274,11 @@ class qa_caching_main {
         $lines = array_filter($lines, 'strlen');
         $html = implode("\n", $lines);
         return $html;
+    }
+*/
+    private function compress_html($html) {
+        require_once QA_PLUGIN_DIR.'q2a-caching/tools/minify/HTML.php';
+        return Minify_HTML::minify($html);
     }
 
     /**
