@@ -26,22 +26,22 @@ include_once(dirname(__FILE__).'/qa-caching-registered.php');
  * Register the plugin
  */
 qa_register_plugin_module(
-        'process', // type of module
-        'qa-caching-main.php', // PHP file containing module class
-        'qa_caching_main', // module class name in that PHP file
-        'q2a Caching Plugin' // human-readable name of module
+    'process', // type of module
+    'qa-caching-main.php', // PHP file containing module class
+    'qa_caching_main', // module class name in that PHP file
+    'q2a Caching Plugin' // human-readable name of module
 );
 qa_register_plugin_module(
-        'event', // type of module
-        'qa-caching-event.php', // PHP file containing module class
-        'qa_caching_event', // module class name in that PHP file
-        'q2a Caching Plugin Event Handler' // human-readable name of module
+    'event', // type of module
+    'qa-caching-event.php', // PHP file containing module class
+    'qa_caching_event', // module class name in that PHP file
+    'q2a Caching Plugin Event Handler' // human-readable name of module
 );
 qa_register_plugin_layer(
-        'qa-caching-layer.php', // PHP file containing module class
-        'q2a Caching Plugin Layer'
+    'qa-caching-layer.php', // PHP file containing module class
+    'q2a Caching Plugin Layer'
 );
 qa_register_plugin_overrides(
-        'qa-caching-overrides.php' // PHP file containing overrided function
+    'qa-caching-overrides.php' // PHP file containing overrided function
 );
 
