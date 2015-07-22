@@ -198,15 +198,15 @@ class qa_caching_main {
             }
         }
         $requests = QA_CACHING_EXCLUDED_REQUESTS;
-		if(!empty($requests)) {
+        if(!empty($requests)) {
             $requests = explode(',', str_replace(array("\r\n", "\r", "\n"), '', $requests));
-		} else {
+        } else {
             $requests = array();
-		}
-		if(in_array(qa_request(), $requests)) {
+        }
+        if(in_array(qa_request(), $requests)) {
             return false;
         }
-		return true;
+        return true;
     }
     /**
      * Checks if the user is allowed to be shown cache.
@@ -224,11 +224,11 @@ class qa_caching_main {
             return false;
         }
         $requests = QA_CACHING_EXCLUDED_REQUESTS;
-		if(!empty($requests)) {
+        if(!empty($requests)) {
             $requests = explode(',', str_replace(array("\r\n", "\r", "\n"), '', $requests));
-		} else {
+        } else {
             $requests = array();
-		}
+        }
         if(in_array(qa_request(), $requests)) {
             return false;
         }
@@ -292,16 +292,16 @@ class qa_caching_main {
      * @param type $qa_content
      * @return type
      */
-	function option_default($option) {
-		switch ($option) {
-		case 'qa_caching_enabled':
-			return false;
-		case 'qa_caching_excluded_requests':
-			return '';
-		case 'qa_caching_expiration_time':
-			return 3600;
-		case 'qa_caching_expiration_events':
-			return  'q_post,a_post,c_post'.PHP_EOL
+    function option_default($option) {
+        switch ($option) {
+        case 'qa_caching_enabled':
+            return false;
+        case 'qa_caching_excluded_requests':
+            return '';
+        case 'qa_caching_expiration_time':
+            return 3600;
+        case 'qa_caching_expiration_events':
+            return  'q_post,a_post,c_post'.PHP_EOL
                    .',q_queue,a_queue,c_queue'.PHP_EOL
                    .',q_edit,a_edit,c_edit'.PHP_EOL
                    .',q_close,q_reopen'.PHP_EOL
@@ -335,12 +335,12 @@ class qa_caching_main {
                    //.',feedback'.PHP_EOL
                    //.',search'.PHP_EOL
                    ;
-		case 'qa_caching_compress':
-			return false;
-		case 'qa_caching_debug':
-			return true;
-		}
-	}
+        case 'qa_caching_compress':
+            return false;
+        case 'qa_caching_debug':
+            return true;
+        }
+    }
     function admin_form(&$qa_content) {
         $saved = false;
         if (qa_clicked('qa_caching_submit_button')) {
