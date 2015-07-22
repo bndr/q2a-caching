@@ -259,15 +259,21 @@ class qa_caching_main {
     }
 
     private function compress_html($html) {
-        $search = array(
-            '/(\t)/s', // remove tab
+        $searchs = array(
             '/<!--[\s\S]*?-->/s', // remove comment
+            '/\t/', // remove tab
         );
-        $replace = array(
+        $replaces = array(
             '',
             '',
         );
-        return preg_replace($search, $replace, $html);
+        return $this->remove_newline(preg_replace($searchs, $replaces, $html));
+    }
+    private function remove_newline($html) {
+        $lines = explode("\n", $html);
+        $lines = array_filter($lines, 'strlen');
+        $html = implode("\n", $lines);
+        return $html;
     }
 
     /**
