@@ -26,6 +26,12 @@ Notes
 
 Caching for registered users is being worked on.
 
+Restrictions
+=====
+
+1. Welcome message is disabled.
+2. IP based post author ("me") is converted to "anonymous"
+
 Updates
 ===========
 
