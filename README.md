@@ -34,6 +34,7 @@ V0.4 [2016/07/22] sama55
 1. Optimize program codes
 2. Fix bug about comment form error
 3. Fix bug about submit error on admin panel
+4. Improve compression efficiency (Add logic for removing new lines)
 
 V0.3 [2016/07/21] sama55
 
