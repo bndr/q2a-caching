@@ -36,6 +36,7 @@ V0.4 [2016/07/22] sama55
 3. Fix bug about submit error on admin panel
 4. Improve compression efficiency (Replace with Minify)
 5. Separate cache folder for PC and mobile themes
+6. Restore excluded requests option, and fix bug about root access
 
 V0.3 [2016/07/21] sama55
 
