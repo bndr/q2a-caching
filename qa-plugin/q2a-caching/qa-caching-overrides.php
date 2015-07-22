@@ -5,6 +5,20 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 }
 
 /*
+Return the full form security (anti-CSRF protection) code for an $action (any string) performed within
+QA_FORM_EXPIRY_SECS of now by the current user.
+*/
+function qa_get_form_security_code($action) {
+    qa_set_form_security_key();
+    $main = new qa_caching_main;
+    if($main->now_caching()) {
+        return session_id();
+    } else {
+        $timestamp=qa_opt('db_time');
+        return (int)qa_is_logged_in().'-'.$timestamp.'-'.qa_calc_form_security_hash($action, $timestamp);
+    }
+}
+/*
 Return whether $value matches the expected form security (anti-CSRF protection) code for $action (any string) and
 that the code has not expired (if more than QA_FORM_EXPIRY_SECS have passed). Logs causes for suspicion.
 */
