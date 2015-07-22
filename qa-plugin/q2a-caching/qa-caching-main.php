@@ -12,6 +12,7 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
  * @license http://creativecommons.org/licenses/by-sa/3.0/legalcode
  */
 define('QA_CACHING_DIR', QA_BASE_DIR . 'qa-cache'); //Cache Directory
+define('QA_CACHING_DIR_MOBILE', QA_BASE_DIR . 'qa-cache/mobile'); //Cache Directory for mobile
 define('QA_CACHING_STATUS', (int) qa_opt('qa_caching_enabled')); // "1" - Turned On, "0" - Turned off
 //define('QA_CACHING_EXCLUDED_REQUESTS', qa_opt('qa_caching_excluded_requests')); //Excluded cache entries
 define('QA_CACHING_EXPIRATION_TIME', (int) qa_opt('qa_caching_expiration_time')); //Cache Expiration In seconds
@@ -20,9 +21,7 @@ define('QA_CACHING_COMPRESS', (int) qa_opt('qa_caching_compress')); //Compressed
 define('QA_CACHING_DEBUG', (int) qa_opt('qa_caching_debug')); //Output debug infomation
 
 class qa_caching_main {
-
     protected $is_logged_in, $cache_file, $html, $debug, $timer;
-
     /**
      * Function that is called at page initialization
      */
@@ -30,11 +29,9 @@ class qa_caching_main {
         $this->is_logged_in = qa_get_logged_in_userid();
         $this->timer = microtime(true);
         $this->cache_file = $this->get_filename();
-
         if($this->should_clear_caching()) {
             $this->clear_cache();
         }
-
         if ($this->check_cache() && $this->do_caching()) {
             $this->get_cache();
         } else if ($this->do_caching()) {
@@ -43,7 +40,6 @@ class qa_caching_main {
             return;
         }
     }
-
     /**
      * Function that is called at the end of page rendering
      * @param type $reason
@@ -51,12 +47,14 @@ class qa_caching_main {
      */
     function shutdown($reason = false) {
         if ($this->do_caching() && !$this->is_logged_in && !$this->check_cache()) {
-            if(QA_CACHING_COMPRESS)
+            if(QA_CACHING_COMPRESS) {
                 $this->html = $this->compress_html(ob_get_contents());
-            else
+            } else {
                 $this->html = ob_get_contents();
-            if(strpos($this->html, qa_lang_html('main/page_not_found')) !== false) // if 404 page
+            }
+            if(strpos($this->html, qa_lang_html('main/page_not_found')) !== false) { // if 404 page
                 return;
+            }
             if (QA_DEBUG_PERFORMANCE) {
                 $endtag = '</html>';
                 $rpos = strrpos($this->html, $endtag);
@@ -73,21 +71,24 @@ class qa_caching_main {
         }
         return;
     }
-
     /**
      * Writes file to cache.
      */
     private function write_cache() {
-        if (!file_exists(QA_CACHING_DIR))
+        if (!file_exists(QA_CACHING_DIR)) {
             mkdir(QA_CACHING_DIR, 0755, TRUE);
-
+        }
         if (is_dir(QA_CACHING_DIR) && is_writable(QA_CACHING_DIR)) {
-            if(QA_CACHING_DEBUG)
+            if (qa_opt('site_theme') != qa_opt('site_theme_mobile') && !file_exists(QA_CACHING_DIR_MOBILE)) {
+                mkdir(QA_CACHING_DIR_MOBILE, 0755, TRUE);
+            }
+            if(QA_CACHING_DEBUG) {
                 $this->html .= $this->debug;
-            if (function_exists("sem_get") && ($mutex = @sem_get(2013, 1, 0644 | IPC_CREAT, 1)) && @sem_acquire($mutex))
+            }
+            if (function_exists("sem_get") && ($mutex = @sem_get(2013, 1, 0644 | IPC_CREAT, 1)) && @sem_acquire($mutex)) {
                 file_put_contents($this->cache_file, $this->html) . sem_release($mutex);
             /**/
-            else if (($mutex = @fopen($this->cache_file, "w")) && @flock($mutex, LOCK_EX)) {
+            } else if (($mutex = @fopen($this->cache_file, "w")) && @flock($mutex, LOCK_EX)) {
                 fwrite($mutex, $this->html);
                 fflush($mutex);
                 flock($mutex, LOCK_UN);
@@ -95,7 +96,6 @@ class qa_caching_main {
             /**/
         }
     }
-
     /**
      * Decision to clear cache
      * @return boolean
@@ -110,31 +110,34 @@ class qa_caching_main {
         }
         return false;
     }
-
     /**
      * Clear cache.
      */
     public function clear_cache() {
         $this->unlinkRecursive(QA_CACHING_DIR);
     }
-
     /**
      * Recursively delete files in specific folder.
      */
-    private function unlinkRecursive($dir, $deleteRootToo=false) {
-        if(!$dh = @opendir($dir))
+    private function unlinkRecursive($dir, $deleteFolder=false, $deleteRootToo=false) {
+        if(!$dh = @opendir($dir)) {
             return;
+        }
         while (false !== ($obj = readdir($dh))) {
-            if($obj == '.' || $obj == '..')
+            if($obj == '.' || $obj == '..') {
                 continue;
-            if(!@unlink($dir . '/' . $obj))
-                $this->unlinkRecursive($dir.'/'.$obj, true);
+            } else if(is_dir($obj) && !$deleteFolder) {
+                continue;
+            }
+            if(!@unlink($dir . '/' . $obj)) {
+                $this->unlinkRecursive($dir.'/'.$obj, $deleteFolder, false);
+            }
         }
         closedir($dh);
-        if($deleteRootToo)
+        if($deleteRootToo) {
             @rmdir($dir);
+        }
     }
-    
     /**
      * Outputs cache to the user
      */
@@ -149,7 +152,6 @@ class qa_caching_main {
         }
         exit($contents);
     }
-
     /**
      * Checks if cache exists
      * 
@@ -165,7 +167,6 @@ class qa_caching_main {
             return false;
         }
     }
-
     /**
      * Checks if the user is allowed to be shown cache.
      * Only non-registered users see the cached version.
@@ -188,10 +189,12 @@ class qa_caching_main {
         }
         if (is_array($_COOKIE) && !empty($_COOKIE)) {
             foreach ($_COOKIE as $k => $v) {
-                if (preg_match('#session#', $k) && strlen($v))
+                if (preg_match('#session#', $k) && strlen($v)) {
                     return false;
-                if (preg_match("#fbs_#", $k) && strlen($v))
+                }
+                if (preg_match("#fbs_#", $k) && strlen($v)) {
                     return false;
+                }
             }
         }
         /*
@@ -202,7 +205,6 @@ class qa_caching_main {
         */
 		return true;
     }
-
     /**
      * Checks if the user is allowed to be shown cache.
      * Only non-registered users see the cached version.
@@ -226,35 +228,34 @@ class qa_caching_main {
         */
         return true;
     }
-
     /**
      * @TODO: Set the same header for html pages
      * @param type $headers
      */
     private function set_headers($headers) {
-
         $headers = headers_list();
     }
-
     /**
      * Returns a unique filepath+filename to store the cache.
      * @return type
      */
     private function get_filename() {
-    
         $md5 = md5($_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
-        return QA_CACHING_DIR . "/" . $md5;
+        if(!qa_is_mobile_probably() || qa_opt('site_theme') == qa_opt('site_theme_mobile')) {
+            return QA_CACHING_DIR . "/" . $md5;
+        } else {
+            return QA_CACHING_DIR_MOBILE . "/" . $md5;
+        }
     }
-
     /**
      * What page does the user see?
      * @return boolean
      */
     private function what_page() {
         $query = (isset($_REQUEST['qa']) && $_SERVER['REQUEST_METHOD'] == "GET") ? $_REQUEST['qa'] : FALSE;
-        if (!$query)
+        if (!$query) {
             return false;
-
+        }
         return $query;
     }
 /*
@@ -280,7 +281,6 @@ class qa_caching_main {
         require_once QA_PLUGIN_DIR.'q2a-caching/tools/minify/HTML.php';
         return Minify_HTML::minify($html);
     }
-
     /**
      * Qache settings form on the admin page.
      * @param type $qa_content
@@ -337,7 +337,6 @@ class qa_caching_main {
 	}
     function admin_form(&$qa_content) {
         $saved = false;
-
         if (qa_clicked('qa_caching_submit_button')) {
             qa_opt('qa_caching_enabled', (int) qa_post_text('qa_caching_enabled'.'_field'));
             //qa_opt('qa_caching_excluded_requests', qa_post_text('qa_caching_excluded_requests'.'_field'));
@@ -432,5 +431,4 @@ class qa_caching_main {
             ),
         );
     }
-
 }
