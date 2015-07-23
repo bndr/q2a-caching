@@ -217,7 +217,7 @@ class qa_caching_main {
         if(!QA_CACHING_STATUS) {
             return false;
         }
-        if($this->is_logged_in) {
+        if(qa_get_logged_in_userid()) {
             return false;
         }
         if(qa_request_part(0) == 'admin') {
