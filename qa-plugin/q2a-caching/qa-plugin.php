@@ -41,7 +41,4 @@ qa_register_plugin_layer(
     'qa-caching-layer.php', // PHP file containing module class
     'q2a Caching Plugin Layer'
 );
-qa_register_plugin_overrides(
-    'qa-caching-overrides.php' // PHP file containing overrided function
-);
 
