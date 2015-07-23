@@ -3,12 +3,7 @@ q2a-caching V0.5
 
 Question2Answer Caching Plugin
 
-This plugin is still under construction. Although the trial in a secure test environment is OK. But, Never use in your formal site.
-
-Important
-===========
-
-This (master) branch is under development always. When you download this plugin, please download from newest tagged release version.
+This plugin is still under construction. Although the trial in a secure test environment is OK. But, Never use in your formal site. And, this (master) branch is under development always. When you download this plugin, please download from newest tagged release version.
 
 Description
 ===========
