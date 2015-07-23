@@ -142,14 +142,54 @@ class qa_caching_main {
      * Outputs cache to the user
      */
     private function get_cache() {
+        global $qa_usage;
+        qa_db_connect('qa_page_db_fail_handler');
+
+        qa_page_queue_pending();
+        qa_load_state();
+        qa_check_login_modules();
+       
+        qa_check_page_clicks();
+
         $contents = file_get_contents($this->cache_file);
-        if (QA_DEBUG_PERFORMANCE) {
-            global $qa_usage;
+
+        $qa_content = array();	// Dummy contents
+        $userid = qa_get_logged_in_userid();
+        $questionid = qa_request_part(0);
+        $cookieid = qa_cookie_get(true);
+        if(is_numeric($questionid)) {
+            $question = qa_db_select_with_pending(qa_db_full_post_selectspec($userid, $questionid));
+            if( is_numeric($questionid)
+             && qa_opt('do_count_q_views')
+             && !preg_match("/^(?:POST|PUT)$/i", $_SERVER["REQUEST_METHOD"])
+             && !qa_is_http_post()
+             && qa_is_human_probably()
+             && (
+                !$question['views'] || ( // if it has more than zero views
+                     (($question['lastviewip']!=qa_remote_ip_address()) || (!isset($question['lastviewip']))) // then it must be different IP from last view
+                  && (($question['createip']!=qa_remote_ip_address()) || (!isset($question['createip']))) // and different IP from the creator
+                  && (($question['userid']!=$userid) || (!isset($question['userid']))) // and different user from the creator
+                  && (($question['cookieid']!=$cookieid) || (!isset($question['cookieid']))) // and different cookieid from the creator
+                  )
+                )
+              )
+            {
+                $qa_content['inc_views_postid'] = $questionid;
+            } else {
+                $qa_content['inc_views_postid'] = null;
+            }
+            qa_do_content_stats($qa_content);
+        }
+
+        if(QA_DEBUG_PERFORMANCE) {
             ob_start();
             $qa_usage->output();
             $contents .= ob_get_contents();
             ob_end_clean();
         }
+
+        qa_db_disconnect();
+
         exit($contents);
     }
     /**
