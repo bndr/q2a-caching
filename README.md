@@ -10,7 +10,7 @@ Description
 
 This plugin will cache the pages for unregistered users.
 
-Restrictions (!important)
+Restrictions (important)
 =====
 
 1. Welcome message is disabled.
