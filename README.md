@@ -15,6 +15,14 @@ Description
 
 This plugin will cache the pages for unregistered users.
 
+Restrictions (!important)
+=====
+
+1. Welcome message is disabled.
+2. "qa_id" cookie is ignored at unlogged in status.
+3. Post author ("me") by unlogged in users is changed from "me" to "anonymous" at unlogged in status.
+4. Post buttons ("edit", "close", "hide", etc) by unlogged in users are not display at unlogged in status.
+
 Installation
 ===========
 
@@ -22,14 +30,6 @@ Installation
 2. Check the permissions of files.
 3. Turn on the caching in the Admin->Plugins page
 4. Enjoy the caching
-
-Restrictions
-=====
-
-1. Welcome message is disabled.
-2. "qa_id" cookie is ignored at unlogged in status.
-3. Post author ("me") by unlogged in users is changed from "me" to "anonymous" at unlogged in status.
-4. Post buttons ("edit", "close", "hide", etc) are not display at unlogged in status.
 
 Updates
 ===========
