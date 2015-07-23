@@ -21,11 +21,6 @@ Installation
 3. Turn on the caching in the Admin->Plugins page
 4. Enjoy the caching
 
-Notes
-=====
-
-Caching for registered users is being worked on.
-
 Restrictions
 =====
 
@@ -35,7 +30,7 @@ Restrictions
 Updates
 ===========
 
-V0.4 [2016/07/22] sama55
+V0.4 [2016/07/23] sama55
 
 1. Optimize program codes
 2. Fix bug about comment form error
@@ -43,7 +38,7 @@ V0.4 [2016/07/22] sama55
 4. Improve compression efficiency (Replace with Minify)
 5. Separate cache folder for PC and mobile themes
 6. Restore excluded requests option, and fix bug about root access
-7. Change logic of CSRF protector again
+7. Remove changes for CSRF protector
 
 V0.3 [2016/07/21] sama55
 
