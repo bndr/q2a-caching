@@ -1,4 +1,4 @@
-q2a-caching V0.4
+q2a-caching V0.5
 ===========
 
 Question2Answer Caching Plugin
@@ -33,6 +33,10 @@ Installation
 
 Updates
 ===========
+
+V0.5 [2016/07/23] sama55
+
+1. Fix issue of view count
 
 V0.4 [2016/07/23] sama55
 
