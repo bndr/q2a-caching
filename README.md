@@ -29,9 +29,10 @@ Installation
 Updates
 ===========
 
-V0.5 [2016/07/23] sama55
+V0.5 (sama55)
 
-1. Fix issue of view count
+1. [2016/07/24] Fix issue of deletion of user
+2. [2016/07/23] Fix issue of view count
 
 V0.4 [2016/07/23] sama55
 
