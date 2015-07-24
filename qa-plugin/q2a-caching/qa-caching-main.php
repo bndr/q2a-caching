@@ -369,7 +369,7 @@ class qa_caching_main {
                    .',u_level'.PHP_EOL
                    //.',u_block,u_unblock'.PHP_EOL
                    .',u_delete'.PHP_EOL
-                   //.',u_favorite,u_unfavorite'.PHP_EOL
+                   .',u_favorite,u_unfavorite'.PHP_EOL
                    //.',ip_block,ip_unblock'.PHP_EOL
                    //.',tag_favorite,tag_unfavorite'.PHP_EOL
                    //.',cat_favorite,cat_unfavorite'.PHP_EOL
