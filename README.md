@@ -31,8 +31,8 @@ Updates
 
 V0.5 (sama55)
 
-1. [2016/07/24] Fix issue of deletion of user
-2. [2016/07/23] Fix issue of view count
+1. [2016/07/24] Fix issue of deletion of user [#14](https://github.com/sama55/q2a-caching/issues/14)
+2. [2016/07/23] Fix issue of view count [#12](https://github.com/sama55/q2a-caching/issues/12)
 
 V0.4 [2016/07/23] sama55
 
