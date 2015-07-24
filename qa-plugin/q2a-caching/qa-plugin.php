@@ -5,7 +5,7 @@
   Plugin URI: https://github.com/sama55/q2a-caching
   Plugin Description: Question2Answer Caching plugin
   Plugin Version: 0.5
-  Plugin Date: 2015-07-23
+  Plugin Date: 2015-07-24
   Plugin Author: Vadim Kr. bndr + sama55
   Plugin License: http://creativecommons.org/licenses/by-sa/3.0/legalcode
   Plugin Minimum Question2Answer Version: 1.7
