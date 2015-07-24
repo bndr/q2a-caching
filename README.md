@@ -24,7 +24,7 @@ Installation
 
 1. Move the q2a-caching directory to your qa-plugin directory.
 2. Check the permissions of files.
-3. Check the permissions options of Q2A (Admin > Permissions > "Anybody" options)
+3. Check the Q2A permissions (Admin > Permissions > "Anybody" options)
     - A lot of post operation features by anonymous will be limited.
     - We highly recommend that you change "Anybody" options to "Registered users".
 4. Turn on the caching in the Admin->Plugins page
