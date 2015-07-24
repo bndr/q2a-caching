@@ -38,7 +38,7 @@ V0.5 (sama55)
 5. [2015/07/24] Fix issue of u_level event [#17](https://github.com/sama55/q2a-caching/issues/17)
 6. [2015/07/24] Fix issue of u_favorite,u_unfavorite event [#18](https://github.com/sama55/q2a-caching/issues/18)
 7. [2015/07/24] Fix issue of tag_favorite,tag_unfavorite,cat_favorite,cat_unfavorite event [#19](https://github.com/sama55/q2a-caching/issues/19)
-8. [2015/07/24] Fix issue of operability about option panel [#20](https://github.com/sama55/q2a-caching/issues/20)
+8. [2015/07/24] Fix issue about operability of option panel [#20](https://github.com/sama55/q2a-caching/issues/20)
 
 
 V0.4 [2015/07/23] sama55
