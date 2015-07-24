@@ -34,8 +34,9 @@ V0.5 (sama55)
 1. [2016/07/23] Fix issue of view count [#12](https://github.com/sama55/q2a-caching/issues/12)
 2. [2016/07/24] Fix issue of deletion of user [#14](https://github.com/sama55/q2a-caching/issues/14)
 3. [2016/07/24] Fix issue of x_queue event [#15](https://github.com/sama55/q2a-caching/issues/15)
-4. [2016/07/24] Fix issue of x_approve and x_reject event [#16](https://github.com/sama55/q2a-caching/issues/16)
+4. [2016/07/24] Fix issue of x_approve,x_reject event [#16](https://github.com/sama55/q2a-caching/issues/16)
 5. [2016/07/24] Fix issue of u_level event [#17](https://github.com/sama55/q2a-caching/issues/17)
+6. [2016/07/24] Fix issue of u_favorite,u_unfavorite event [#18](https://github.com/sama55/q2a-caching/issues/18)
 
 
 V0.4 [2016/07/23] sama55
