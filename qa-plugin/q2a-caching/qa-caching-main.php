@@ -342,7 +342,7 @@ class qa_caching_main {
             return 3600;
         case 'qa_caching_expiration_events':
             return  'q_post,a_post,c_post'.PHP_EOL
-                   .',q_queue,a_queue,c_queue'.PHP_EOL
+                   //.',q_queue,a_queue,c_queue'.PHP_EOL
                    .',q_edit,a_edit,c_edit'.PHP_EOL
                    .',q_close,q_reopen'.PHP_EOL
                    .',a_select,a_unselect'.PHP_EOL
