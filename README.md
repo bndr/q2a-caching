@@ -16,7 +16,7 @@ Restrictions (important)
 1. Welcome message is disabled.
 2. "qa_id" cookie is ignored at unlogged in status.
     - Post author ("me") by anonymous users is changed to "anonymous".
-    - Post buttons ("edit", "close", "hide", etc) are not displayed to anonymous users.
+    - Post edit buttons ("edit", "close", "hide", etc) are not displayed to anonymous users.
     - "Allow users to answer their own question" option" is disabled for anonymous users.
 
 Installation
