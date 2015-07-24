@@ -37,6 +37,7 @@ V0.5 (sama55)
 4. [2015/07/24] Fix issue of x_approve,x_reject event [#16](https://github.com/sama55/q2a-caching/issues/16)
 5. [2015/07/24] Fix issue of u_level event [#17](https://github.com/sama55/q2a-caching/issues/17)
 6. [2015/07/24] Fix issue of u_favorite,u_unfavorite event [#18](https://github.com/sama55/q2a-caching/issues/18)
+7. [2015/07/24] Fix issue of tag_favorite,tag_unfavorite,cat_favorite,cat_unfavorite event [#19](https://github.com/sama55/q2a-caching/issues/19)
 
 
 V0.4 [2015/07/23] sama55
