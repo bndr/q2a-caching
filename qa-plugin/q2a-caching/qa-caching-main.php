@@ -446,6 +446,42 @@ class qa_caching_main {
                     'rows' => 20,
                     'value' => qa_opt('qa_caching_expiration_events'),
                     'tags' => 'NAME="qa_caching_expiration_events_field"',
+					'note' => 'All events list:<br/>'.PHP_EOL
+                   .'q_post,a_post,c_post<br/>'.PHP_EOL
+                   .',q_queue,a_queue,c_queue<br/>'.PHP_EOL
+                   .',q_edit,a_edit,c_edit<br/>'.PHP_EOL
+                   .',q_close,q_reopen<br/>'.PHP_EOL
+                   .',a_select,a_unselect<br/>'.PHP_EOL
+                   .',q_flag,a_flag,c_flag,q_unflag,a_unflag,c_unflag,q_clearflags,a_clearflags,c_clearflags<br/>'.PHP_EOL
+                   .',q_hide,a_hide,c_hide,q_reshow,a_reshow,c_reshow<br/>'.PHP_EOL
+                   .',q_approve,a_approve,c_approve,q_reject,a_reject,c_reject<br/>'.PHP_EOL
+                   .',q_requeue,a_requeue,c_requeue<br/>'.PHP_EOL
+                   .',q_delete,a_delete,c_delete<br/>'.PHP_EOL
+                   .',q_claim,a_claim,c_claim<br/>'.PHP_EOL
+                   .',q_move<br/>'.PHP_EOL
+                   .',a_to_c<br/>'.PHP_EOL
+                   .',q_vote_up,q_vote_down,q_vote_nil,a_vote_up,a_vote_down,a_vote_nil<br/>'.PHP_EOL
+                   .',q_favorite,q_unfavorite<br/>'.PHP_EOL
+                   .',u_register<br/>'.PHP_EOL
+                   .',u_login,u_logout<br/>'.PHP_EOL
+                   .',u_confirmed<br/>'.PHP_EOL
+                   .',u_reset<br/>'.PHP_EOL
+                   .',u_save<br/>'.PHP_EOL
+                   .',u_password<br/>'.PHP_EOL
+                   .',u_edit<br/>'.PHP_EOL
+                   .',u_message<br/>'.PHP_EOL
+                   .',u_wall_post<br/>'.PHP_EOL
+                   .',u_wall_delete<br/>'.PHP_EOL
+                   .',u_level<br/>'.PHP_EOL
+                   .',u_block,u_unblock<br/>'.PHP_EOL
+                   .',u_delete<br/>'.PHP_EOL
+                   .',u_favorite,u_unfavorite<br/>'.PHP_EOL
+                   .',ip_block,ip_unblock<br/>'.PHP_EOL
+                   .',tag_favorite,tag_unfavorite<br/>'.PHP_EOL
+                   .',cat_favorite,cat_unfavorite<br/>'.PHP_EOL
+                   .',feedback<br/>'.PHP_EOL
+                   .',search'.PHP_EOL
+                   ,
                 ),
                 array(
                     'id' => 'qa_caching_compress',
