@@ -31,15 +31,15 @@ Updates
 
 V0.5 (sama55)
 
-1. [2016/07/23] Fix issue of view count [#12](https://github.com/sama55/q2a-caching/issues/12)
-2. [2016/07/24] Fix issue of deletion of user [#14](https://github.com/sama55/q2a-caching/issues/14)
-3. [2016/07/24] Fix issue of x_queue event [#15](https://github.com/sama55/q2a-caching/issues/15)
-4. [2016/07/24] Fix issue of x_approve,x_reject event [#16](https://github.com/sama55/q2a-caching/issues/16)
-5. [2016/07/24] Fix issue of u_level event [#17](https://github.com/sama55/q2a-caching/issues/17)
-6. [2016/07/24] Fix issue of u_favorite,u_unfavorite event [#18](https://github.com/sama55/q2a-caching/issues/18)
+1. [2015/07/23] Fix issue of view count [#12](https://github.com/sama55/q2a-caching/issues/12)
+2. [2015/07/24] Fix issue of deletion of user [#14](https://github.com/sama55/q2a-caching/issues/14)
+3. [2015/07/24] Fix issue of x_queue event [#15](https://github.com/sama55/q2a-caching/issues/15)
+4. [2015/07/24] Fix issue of x_approve,x_reject event [#16](https://github.com/sama55/q2a-caching/issues/16)
+5. [2015/07/24] Fix issue of u_level event [#17](https://github.com/sama55/q2a-caching/issues/17)
+6. [2015/07/24] Fix issue of u_favorite,u_unfavorite event [#18](https://github.com/sama55/q2a-caching/issues/18)
 
 
-V0.4 [2016/07/23] sama55
+V0.4 [2015/07/23] sama55
 
 1. Optimize program codes
 2. Fix bug about comment form error
@@ -49,7 +49,7 @@ V0.4 [2016/07/23] sama55
 6. Restore excluded requests option, and fix bug about root access
 7. Remove changes for CSRF protector
 
-V0.3 [2016/07/21] sama55
+V0.3 [2015/07/21] sama55
 
 1. When POST/PUT was requested in admin panel, caches are removed
 2. When requests is 404 (Page not found), it is not cached.
@@ -58,7 +58,7 @@ V0.3 [2016/07/21] sama55
 5. Change logic of CSRF protector
 6. When user is not logged in, welcome notification bar is removed.
 
-V0.2 [2016/07/17] sama55
+V0.2 [2015/07/17] sama55
 
 1. Fix bug (write_cache() in qa-cashing-main.php)
 2. Change all options name (For batting risk with other plugin) 
