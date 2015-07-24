@@ -366,6 +366,7 @@ class qa_caching_main {
                    //.',u_message'.PHP_EOL
                    //.',u_wall_post'.PHP_EOL
                    //.',u_wall_delete'.PHP_EOL
+                   .',u_level'.PHP_EOL
                    //.',u_block,u_unblock'.PHP_EOL
                    .',u_delete'.PHP_EOL
                    //.',u_favorite,u_unfavorite'.PHP_EOL
