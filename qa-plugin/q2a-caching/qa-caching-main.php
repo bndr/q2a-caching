@@ -348,7 +348,7 @@ class qa_caching_main {
                    .',a_select,a_unselect'.PHP_EOL
                    .',q_flag,a_flag,c_flag,q_unflag,a_unflag,c_unflag,q_clearflags,a_clearflags,c_clearflags'.PHP_EOL
                    .',q_hide,a_hide,c_hide,q_reshow,a_reshow,c_reshow'.PHP_EOL
-                   .',q_approve,a_approve,c_approve,q_reject,a_reject,c_reject'.PHP_EOL
+                   //.',q_approve,a_approve,c_approve,q_reject,a_reject,c_reject'.PHP_EOL
                    .',q_requeue,a_requeue,c_requeue'.PHP_EOL
                    .',q_delete,a_delete,c_delete'.PHP_EOL
                    .',q_claim,a_claim,c_claim'.PHP_EOL
